@@ -1,0 +1,36 @@
+version: "3"
+services:
+  drupal8:
+    build: './drupal9'
+    container_name: "drupal9"
+    ports:
+      - 8011:80
+    environment:
+      # Local db
+      - DB_POSTGRES_HOST=postgres_d9
+      - DB_POSTGRES=d9
+      - DB_POSTGRES_USERNAME=postgres
+      - DB_POSTGRES_PASSWORD=postgres
+    volumes:
+      - ./drupal9/modules:/var/www/html/sites/default/modules
+      - ./drupal9/themes:/var/www/html/sites/default/themes
+  postgres:
+    image: postgres:10
+    container_name: postgres_d9
+    environment:
+      POSTGRES_DB: d9
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+    restart: always
+  pgadmin:
+    image: dpage/pgadmin4:3.3
+    container_name: pgadmin9
+    ports:
+      - 7799:80
+    volumes:
+      - ./pgadmin:/var/lib/pgadmin/storage
+    environment:
+      PGADMIN_DEFAULT_EMAIL: postgres
+      PGADMIN_DEFAULT_PASSWORD: postgres
+    hostname: pgadmin4
+    restart: always
